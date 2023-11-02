@@ -1,6 +1,6 @@
 %% Load the all the input data
 load(dir_vel_tilde);
-load(dir_y_ref);
+load y.mat;
 load(dir_u_tauL_stats,'u_tauL_stats.mat');
 
 %% Set up the uniform grid
