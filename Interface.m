@@ -40,11 +40,7 @@ dir_u_tauL_stats  = '';
 dir_save = '';
 
 % Maximum wall-normal position (choose between 2 and 104)
-ymax = []; 
-
-% Time steps of u_tauL snapshots
-snap = 101; snap_start = 6401; snap_end = 6501;
-
+ymax = 104; 
 
 % Excuting code file
 QSQH_model
