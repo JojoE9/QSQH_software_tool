@@ -39,8 +39,10 @@ dir_u_tauL_stats  = '';
 % Locate the directory of the output of the synthetic model
 dir_ouput = '';
 
-% Maximum wall-normal position (choose between 2 and 104)
+% Maximum spatial positions in wall unit
+xmax = [];
 ymax = 104; 
+zmax = [];
 
 % Excuting code file
 QSQH_model
