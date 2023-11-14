@@ -13,9 +13,6 @@ dir_save = '';
 Lx = []; % Length of the stream-wise domain
 Lz = []; % Length of the span-wise domain
 
-% Wall-normal position of the input data (in wall unit)
-y = [];
-
 % Excuting code file
 Data_converter
 
@@ -41,7 +38,7 @@ dir_ouput = '';
 
 % Maximum spatial positions in wall unit
 xmax = [];
-ymax = 104; 
+ymax = []; 
 zmax = [];
 
 % Excuting code file
