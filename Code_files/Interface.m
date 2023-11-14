@@ -7,7 +7,7 @@ clc
 dir_input = '';
 
 % Locate the directory of the output of the converted data
-dir_output = '';
+dir_save = '';
 
 % Size of the target flow field (in wall unit)
 Lx = []; % Length of the stream-wise domain
@@ -37,7 +37,7 @@ dir_u_tauL = '';
 dir_u_tauL_stats  = '';
 
 % Locate the directory of the output of the synthetic model
-dir_save = '';
+dir_ouput = '';
 
 % Maximum wall-normal position (choose between 2 and 104)
 ymax = 104; 
