@@ -12,6 +12,7 @@ dir_save = '';
 % Size of the target flow field (in wall unit)
 Lx = []; % Length of the stream-wise domain
 Lz = []; % Length of the span-wise domain
+y = []; % Wall-normal position of the velocity field of the input data
 
 % Excuting code file
 Data_converter
