@@ -1,14 +1,16 @@
 %% Load the all the input data
 load(dir_vel_tilde);
-load y.mat;
+load(dir_y_ref,'y.mat');
 load(dir_u_tauL_stats,'u_tauL_stats.mat');
 
 %% Set up the uniform grid
 
 % 1D grid in x,z,y directions
-x_plus_ref = 0:12:300;
-z_plus_ref = 0:6:300;
-y_plus_ref = y(1:ymax).';
+x_plus_ref = 0:12:xmax;
+z_plus_ref = 0:6:zmax;
+
+[val,id] = min(abs(ymax - y));
+y_plus_ref = y(1:id).';
 
 % 3D grid
 [Xref,Zref,Yref] = ndgrid(x_plus_ref,z_plus_ref,y_plus_ref);
