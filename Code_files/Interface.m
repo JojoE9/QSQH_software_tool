@@ -10,8 +10,8 @@ dir_input = '';
 dir_save = '';
 
 % Size of the target flow field (in wall unit)
-Lx = []; % Length of the stream-wise domain
-Lz = []; % Length of the span-wise domain
+Lx = 8*1000*pi; % Length of the stream-wise domain, the pre-allocated value is the testing value
+Lz = 3*1000*pi; % Length of the span-wise domain
 
 % Excuting code file
 Data_converter
@@ -31,7 +31,7 @@ dir_y_ref = '';
 dir_u_tauL = '';
 
 % Locate the directory of statistics of u_tauL and theta
-dir_u_tauL_stats  = '';
+dir_tau_stats  = '';
 
 % Locate the directory of the output of the synthetic model
 dir_ouput = '';
