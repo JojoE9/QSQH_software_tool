@@ -10,39 +10,36 @@ kx = round(Lx/lambda_x_plus);
 kz = round(Lz/lambda_z_plus);
 
 % Load the list of names of the input data
-Files_input = dir([dir_input,'vel_wall_*.mat']);
+Files_input = dir([dir_input,'tau_*.mat']);
 
 % Apply the large-scale filter to the input data
 for n = 1:size(Files_input,1)
 
     load([dir_input,Files_input(n).name]);
 
-    nx = size(u,1); % Number of grid points in x direction
-    nz = size(u,2); % Number of grid points in z direction
+    nx = size(taux,1); % Number of grid points in x direction
+    nz = size(taux,2); % Number of grid points in z direction
 
-    u_hat = fft2(u); % 2D Fast Fourier Transform, stream-wise velocity
-    w_hat = fft2(w); % 2D Fast Fourier Transform, span-wise velocity
+    taux_hat = fft2(taux); % 2D Fast Fourier Transform, stream-wise velocity
+    tauz_hat = fft2(tauz); % 2D Fast Fourier Transform, span-wise velocity
 
-    u_hat((kx+2):(nx-kx),:) = 0; % Zero out the specified modes
-    u_hat(:,(kz+2):(nz-kz)) = 0; 
+    taux_hat((kx+2):(nx-kx),:) = 0; % Zero out the specified modes
+    taux_hat(:,(kz+2):(nz-kz)) = 0; 
 
-    w_hat((kx+2):(nx-kx),:) = 0;
-    w_hat(:,(kz+2):(nz-kz)) = 0; 
+    tauz_hat((kx+2):(nx-kx),:) = 0;
+    tauz_hat(:,(kz+2):(nz-kz)) = 0; 
 
-    uL = ifft2(u_hat); % 2D Inverse FFT
-    wL = ifft2(w_hat); 
+    tauxL = ifft2(taux_hat); % 2D Inverse FFT
+    tauzL = ifft2(tauz_hat); 
 
-    duLdy = uL/y; % Large-scale wall shear stresses in x and z directions
-    dwLdy = wL/y;
-
-    tauL = sqrt(duLdy.^2+dwLdy.^2); % Resultant wall shear stress
+    tauL = sqrt(tauxL.^2+tauzL.^2); % Resultant wall shear stress
     u_tauL_plus = sqrt(tauL); % Large-scale friction velocity
 
     % Direction of the large-scale friction velocity
-    theta = -atan(dwLdy./duLdy); 
+    theta = -atan(tauzL./tauxL); 
 
     % Name of files of the filtered field
-    newname = strrep(Files_input(n).name,'vel_wall','u_tauL'); 
+    newname = strrep(Files_input(n).name,'tau','u_tauL'); 
 
     % Store the output data
     save([dir_output,newname],'u_tauL_plus','theta','-v7.3'); 
