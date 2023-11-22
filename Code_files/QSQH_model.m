@@ -6,8 +6,8 @@ load([dir_tau_stats,'tau_stats.mat']);
 %% Set up the uniform grid
 
 % 1D grid in x,z,y directions
-x_plus_ref = 0:12:xmax;
-z_plus_ref = 0:6:zmax;
+x_plus_ref = -156:12:156;
+z_plus_ref = -150:6:150;
 
 [val,id] = min(abs(ymax - y));
 y_plus_ref = y(1:id).';
@@ -21,9 +21,10 @@ save([dir_output,'boxsize.mat'],'x_plus_ref','z_plus_ref','y_plus_ref');
 
 Files = dir([dir_u_tauL,'u_tauL_*.mat']);
 
-load([dir_u_tauL,Files(3).name]);
+load([dir_u_tauL,Files(1).name]);
 
 load([dir_vel_tilde,'xz_tilde.mat']);
+%%
 
 X = size(u_tauL_plus,1);
 Z = size(u_tauL_plus,2);
@@ -128,14 +129,22 @@ while pw < pw_x || pw < pw_z || pw < pw_t
 
             x_plus_r = (x_tilde/u_tauL(k))/u_tauL_plus_mean;
 
+            x_plus_r = x_plus_r - max(x_plus_r)/2;
+
             z_plus_r = (z_tilde/u_tauL(k))/u_tauL_plus_mean;
+
+            z_plus_r = z_plus_r - max(z_plus_r)/2;
 
             [Xq,Zq,Yq] = ndgrid(x_plus_r,z_plus_r,y_plus);
 
-            Xrot = (Xq-max(u_plus)/2)*cosd(theta(k)) +...
-                (Zq-max(w_plus)/2)*sind(theta(k)) + max(u_plus)/2;
-            Zrot = -(Xq-max(u_plus)/2)*sind(theta(k)) +...
-                (Zq-max(w_plus)/2)*cosd(theta(k)) + max(w_plus)/2;
+            % Xrot = (Xq-max(u_plus)/2)*cosd(theta(k)) +...
+            %     (Zq-max(w_plus)/2)*sind(theta(k)) + max(u_plus)/2;
+            % Zrot = -(Xq-max(u_plus)/2)*sind(theta(k)) +...
+            %     (Zq-max(w_plus)/2)*cosd(theta(k)) + max(w_plus)/2;
+            % Xrot = double(Xrot); Zrot = double(Zrot); Yq = double(Yq);
+
+            Xrot = (Xq)*cosd(theta(k)) + (Zq)*sind(theta(k));
+            Zrot = -(Xq)*sind(theta(k)) + (Zq)*cosd(theta(k));
             Xrot = double(Xrot); Zrot = double(Zrot); Yq = double(Yq);
 
             u_plus_qsqh(n,k,:,:,:) = griddata(Xrot,Zrot,Yq,u_plus, ...
