@@ -47,6 +47,10 @@ while pw < pw_x || pw < pw_z || pw < pw_t
 
     pw = pw+1;
 
+    if pw > ending_loop
+        break
+    end
+
     if pw > pw_x || pw == pw_x
 
         Nx = X;

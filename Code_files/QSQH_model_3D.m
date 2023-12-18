@@ -10,7 +10,7 @@ progressbar
 %% Load the all the input data
 % load(dir_vel_tilde);
 load([dir_y_ref,'y_ref.mat']);
-load([dir_u_tauL_stats,'utauL_stats.mat']);
+load([dir_input,'utauL_stats.mat']);
 
 %% Set up the uniform grid
 
@@ -35,9 +35,9 @@ clear x_plus y_plus z_plus;
 
 %% QSQH model
 
-Files = dir([dir_u_tauL,'u_tauL_*.mat']);
+Files = dir([dir_input,'u_tauL_*.mat']);
 
-load([dir_u_tauL,Files(1).name]);
+load([dir_input,Files(1).name]);
 
 load([dir_vel_tilde,'xz_tilde.mat']);
 
@@ -55,6 +55,10 @@ Nx0 = 2; Nz0 = 2; T0 = 2; pw = starting_loop-1;
 while pw < pw_x || pw < pw_z || pw < pw_t
 
     pw = pw+1;
+
+    if pw > ending_loop
+        break
+    end
 
     if pw > pw_x || pw == pw_x
 
@@ -102,7 +106,7 @@ while pw < pw_x || pw < pw_z || pw < pw_t
 
     for n = 1:T
 
-        LS_wall = load([dir_u_tauL,Files(tstep(n)).name]);
+        LS_wall = load([dir_input,Files(tstep(n)).name]);
 
         u_tauL = reshape(LS_wall.u_tauL_plus(nx,nz),[],1)/u_tauL_plus_mean;
 
