@@ -1,4 +1,4 @@
-This is a predictive model used to generate the synthetic near-wall turbulence velocity field in all three spatial dimensions for certain Reynolds number, thereby to predict the one-point and two-point velocity statistics.
+This is a predictive model used to generate synthetic near-wall turbulence velocity field in all three spatial dimensions, allowing to calculate any statistics of the synthetic velocity field.
 
 The input of the model requires the data of wall friction that is statistically representative. The output of the model will be a set of instances of the velocity field u(x,y,z) where (x,y,z) stands for stream-wise, wall-normal and span-wise directions respectively.
 
