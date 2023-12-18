@@ -39,12 +39,12 @@ for n = 1:size(Files_input,1)
     newname = strrep(Files_input(n).name,'tau','u_tauL'); 
 
     % Store the output data
-    save([dir_save,newname],'u_tauL_plus','theta','-v7.3'); 
+    save([dir_input,newname],'u_tauL_plus','theta','-v7.3'); 
 
 end
 
 % Load the list of names of the output data
-Files_output = dir([dir_save,'u_tauL_*.mat']);
+Files_output = dir([dir_input,'u_tauL_*.mat']);
 
 % Mean value of u_tauL_plus and theta
 
@@ -54,7 +54,7 @@ theta_mean_loc = zeros([size(Files_output,1) 1]);
 
 for n = 1:size(Files_output,1)
 
-    load([dir_save,Files_output(n).name]);
+    load([dir_input,Files_output(n).name]);
 
     u_tauL_mean_loc(n,:) = mean(u_tauL_plus,'all');
 
@@ -74,7 +74,7 @@ theta_var_include_theta_mean_loc = zeros([size(Files_output,1) 1]);
 
 for n = 1:size(Files_output,1)
 
-    load([dir_save,Files_output(n).name]);
+    load([dir_input,Files_output(n).name]);
 
     u_tauL_var_loc(n,:) = ...
         mean(((u_tauL_plus/u_tauL_plus_mean - 1).^2),'all');
@@ -93,6 +93,6 @@ theta_var_include_theta_mean = ...
     mean(theta_var_include_theta_mean_loc,'all');
 
 % Store the statistics of the output data
-save([dir_save,'tau_stats.mat'], ...
+save([dir_input,'utauL_stats.mat'], ...
     'u_tauL_plus_mean','theta_mean','u_tauL_var','theta_var',...
     'theta_var_include_theta_mean');
