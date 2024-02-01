@@ -1,12 +1,3 @@
-%%
-clear
-clc
-
-% User input parameters
-
-lines = readlines('user_input_3D.txt');
-InputParameters = extractAfter(lines(:),',');
-
 % Size of the input friction field in wall unit
 % (The test input has the size of Lx = 8000pi and Lz = 3000pi.)
 Lx = str2double(InputParameters(1)); % Length of the stream-wise domain
@@ -14,8 +5,8 @@ Lz = str2double(InputParameters(2)); % Length of the span-wise domain
 
 % Choose the maximum spatial ranges in wall unit
 % (xmax=0 & zmax=0 for 1D output field)
-xmax = str2double(InputParameters(3)); %xmax = {0, 204}
-zmax = str2double(InputParameters(4)); %zmax = {0, 120}
+% xmax = str2double(InputParameters(3)); %xmax = {0, 204}
+% zmax = str2double(InputParameters(4)); %zmax = {0, 120}
 
 ymin = str2double(InputParameters(5)); %y = {0, 100}
 ymax = str2double(InputParameters(6)); 
@@ -25,25 +16,36 @@ test = str2num(InputParameters(7));
 
 % Starting loop (starting from 1 for a new run)
 starting_loop = str2double(InputParameters(8));
+
+% Starting loop (starting from 1 for a new run)
 ending_loop = str2double(InputParameters(9));
+%% Is this a test?
+if test == true
+    folderending = '_test';
+    load([workdir,file_separator,'QSQH_model',file_separator,...
+        'RNGseed.mat']);
+elseif test == false
+    folderending = '';
+    s = [];
+end
 
-% The following information of directories should remain unchanged for the
-% test, unless the different file separator "/" is used instead of "\". 
-
-% The directory of the tool (current folder)
-workdir = pwd;
-
+seed = s;
+%%
 % The directory of the input friction field
-dir_input = [workdir,convertStringsToChars(InputParameters(10))];
+dir_input = [workdir,file_separator,'input_friction_field',folderending,...
+    file_separator];
 
 % The directory of the reference wall-normal grid
-dir_y_ref = [workdir,convertStringsToChars(InputParameters(11))];
+dir_y_ref = [workdir,file_separator,'QSQH_model',file_separator];
 
 % The directory of the 1D universal velocity field
-dir_vel_tilde = [workdir,convertStringsToChars(InputParameters(12))];
+dir_vel_tilde = [workdir,file_separator,'universal_velocity_field_3D',...
+    folderending,file_separator];
 
 % The folder that will store the 1D output of the synthetic model
-dir_output = [workdir,convertStringsToChars(InputParameters(13))];
+dir_output = [workdir,file_separator,'output_3D',...
+    folderending,file_separator];
+
 
 %% Data converter
 
@@ -146,15 +148,7 @@ save([dir_input,'utauL_stats.mat'], ...
     'u_tauL_plus_mean','theta_mean','u_tauL_var','theta_var',...
     'theta_var_include_theta_mean');
 
-%% Is this a test?
-if test == true
-    outputending = '_test';
-elseif test == false
-    outputending = '';
-end
 
-% Init progress bar
-progressbar
 %% Load the input data
 % load(dir_vel_tilde);
 load([dir_y_ref,'y_ref.mat']);
@@ -163,8 +157,8 @@ load([dir_input,'utauL_stats.mat']);
 %% Set up the uniform grid
 
 % 1D grid in x,z,y directions
-x_plus_ref = 0:12:xmax;
-z_plus_ref = 0:6:zmax;
+x_plus_ref = -xmax/2:12:xmax/2;
+z_plus_ref = -zmax/2:6:zmax/2;
 
 [valmin,idmin] = min(abs(ymin - y));
 [valmax,idmax] = min(abs(ymax - y));
@@ -199,6 +193,9 @@ pw_z = ceil(log2(Z));
 pw_t = ceil(log2(size(Files,1)));
 
 Nx0 = 2; Nz0 = 2; T0 = 2; pw = starting_loop-1;
+
+% Init progress bar
+progressbar
 
 while pw < pw_x || pw < pw_z || pw < pw_t
 
@@ -264,6 +261,12 @@ while pw < pw_x || pw < pw_z || pw < pw_t
 
         TildeFileList = dir(fullfile(dir_vel_tilde,'vel_tilde_*.mat'));
 
+        if test == true
+            rng(seed)
+        elseif test == false
+            rng()
+        end
+
         index = randi(numel(TildeFileList),1,numel(u_tauL));
 
         for k = 1:numel(u_tauL)
@@ -296,14 +299,22 @@ while pw < pw_x || pw < pw_z || pw < pw_t
 
             x_plus_r = (x_tilde/u_tauL(k))/u_tauL_plus_mean;
 
+            x_plus_r = x_plus_r - max(x_plus_r)/2;
+
             z_plus_r = (z_tilde/u_tauL(k))/u_tauL_plus_mean;
+
+            z_plus_r = z_plus_r - max(z_plus_r)/2;
 
             [Xq,Zq,Yq] = ndgrid(x_plus_r,z_plus_r,y_plus);
 
-            Xrot = (Xq-max(u_plus)/2)*cosd(theta(k)) +...
-                (Zq-max(w_plus)/2)*sind(theta(k)) + max(u_plus)/2;
-            Zrot = -(Xq-max(u_plus)/2)*sind(theta(k)) +...
-                (Zq-max(w_plus)/2)*cosd(theta(k)) + max(w_plus)/2;
+            % Xrot = (Xq-max(u_plus)/2)*cosd(theta(k)) +...
+            %     (Zq-max(w_plus)/2)*sind(theta(k)) + max(u_plus)/2;
+            % Zrot = -(Xq-max(u_plus)/2)*sind(theta(k)) +...
+            %     (Zq-max(w_plus)/2)*cosd(theta(k)) + max(w_plus)/2;
+            % Xrot = double(Xrot); Zrot = double(Zrot); Yq = double(Yq);
+
+            Xrot = (Xq)*cosd(theta(k)) + (Zq)*sind(theta(k));
+            Zrot = -(Xq)*sind(theta(k)) + (Zq)*cosd(theta(k));
             Xrot = double(Xrot); Zrot = double(Zrot); Yq = double(Yq);
 
             u_plus_qsqh(n,k,:,:,:) = griddata(Xrot,Zrot,Yq,u_plus, ...
@@ -320,13 +331,13 @@ while pw < pw_x || pw < pw_z || pw < pw_t
     end
 
 
-    save([dir_output,'u_plus_qsqh_loop_',num2str(pw,'%03d'),outputending, ...
+    save([dir_output,'u_plus_qsqh_loop_',num2str(pw,'%03d'),folderending, ...
         '.mat'],'u_plus_qsqh','-v7.3');
 
-    save([dir_output,'v_plus_qsqh_loop_',num2str(pw,'%03d'),outputending, ...
+    save([dir_output,'v_plus_qsqh_loop_',num2str(pw,'%03d'),folderending, ...
         '.mat'],'v_plus_qsqh','-v7.3');
 
-    save([dir_output,'w_plus_qsqh_loop_',num2str(pw,'%03d'),outputending, ...
+    save([dir_output,'w_plus_qsqh_loop_',num2str(pw,'%03d'),folderending, ...
         '.mat'],'w_plus_qsqh','-v7.3');
 
     disp(['Loop ',num2str(pw,'%03d'),' finished.']);

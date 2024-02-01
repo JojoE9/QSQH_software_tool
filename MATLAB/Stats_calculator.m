@@ -171,7 +171,7 @@ plot(Dx_qsqh,Rux_qsqh,'LineStyle','-','Marker','none', ...
     'Color','k','DisplayName', ...
     'User Generated Ouput')
 
-load([diroutput_3D,'u_plus_qsqh_loop_005_test_ref.mat'],'Dx_qsqh_ref', ...
+load([diroutput_3D,'u_plus_qsqh_loop_004_test_ref.mat'],'Dx_qsqh_ref', ...
     'Rux_qsqh_ref');
 
 plot(Dx_qsqh_ref,Rux_qsqh_ref,'LineStyle','none','Marker','+', ...
@@ -187,7 +187,7 @@ xlim([0 102])
 ylim([0 1])
 ax = gca; 
 ax.FontSize = 16; 
-xlabel('$y^+$','FontSize',16,'Interpreter','latex');
+xlabel('$x^+$','FontSize',16,'Interpreter','latex');
 ylabel('$$R_{u''}(\Delta x^+)$$','FontSize',16,'Interpreter','latex');
 
 box on
@@ -202,7 +202,7 @@ plot(Dz_qsqh,Ruz_qsqh,'LineStyle','-','Marker','none', ...
     'Color','k','DisplayName', ...
     'User Generated Ouput')
 
-load([diroutput_3D,'u_plus_qsqh_loop_005_test_ref.mat'],'Dz_qsqh_ref', ...
+load([diroutput_3D,'u_plus_qsqh_loop_004_test_ref.mat'],'Dz_qsqh_ref', ...
     'Ruz_qsqh_ref');
 
 plot(Dz_qsqh_ref,Ruz_qsqh_ref,'LineStyle','none','Marker','+', ...
@@ -218,8 +218,37 @@ xlim([0 60])
 ylim([0 1])
 ax = gca; 
 ax.FontSize = 16; 
-xlabel('$y^+$','FontSize',16,'Interpreter','latex');
+xlabel('$z^+$','FontSize',16,'Interpreter','latex');
 ylabel('$$R_{u''}(\Delta z^+)$$','FontSize',16,'Interpreter','latex');
 
 box on
 hold off
+
+%% Contour plot of NaN of the QSQH synthetic velocity field
+
+% % Load the output
+% load([diroutput_3D,File3D_vel_name]);
+% load([diroutput_3D,File3D_xyz_name]);
+% 
+% % Load the size of the uniform grid
+% [X,Z] = ndgrid(x_plus,z_plus);
+% id = ~isnan(u_plus_qsqh);
+% 
+% % Calculate the density function 
+% dsty = squeeze(sum(id,[1 2 5]))/(size(u_plus_qsqh,1)*...
+%     size(u_plus_qsqh,2)*size(u_plus_qsqh,5));
+% 
+% % Plot the contour map
+% figure
+% set(gcf,'unit','centimeters','Position',[10 10 8.6 6.35]);
+% [C,h] = contour(Z.',X.',dsty.',[1,0.5],...
+%     'ShowText','on','Color','black','LineWidth',0.5, ...
+%     'LabelSpacing',800);
+% clabel(C,h,'FontSize',9,'Color','k')
+% clim([0,1]);
+% axis equal
+% axis tight
+% ax = gca; 
+% ax.FontSize = 9; 
+% xlabel('$z^+$','FontSize',9,'Interpreter','latex');
+% ylabel('$x^+$','FontSize',9,'Interpreter','latex');
