@@ -12,21 +12,21 @@ InputFile_name = 'InputParameters.txt'     # Replace with your text file name
 InputFile_path = os.path.join(current_directory, file_name)
 
 # Check if the file exists before attempting to open it
-if os.path.exists(file_path):
+if os.path.exists(InputFile_path):
     try:
         # Open and read the file
-        with open(file_path, 'r') as file:
+        with open(InputFile_path, 'r') as file:
             lines = file.readlines()
 
         # Do something with the file content
-        print(file_content)
+        print(lines)
 
     except FileNotFoundError:
-        print(f"The file '{file_path}' was not found.")
+        print(f"The file '{InputFile_path}' was not found.")
     except IOError as e:
         print(f"An error occurred while reading the file: {e}")
 else:
-    print(f"The file '{file_path}' does not exist.")
+    print(f"The file '{InputFile_path}' does not exist.")
 
 # Execute the code
 exec(open('Execute_code.py').read())
