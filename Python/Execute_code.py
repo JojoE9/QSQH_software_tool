@@ -8,7 +8,7 @@ zmax = float(InputParameters[3])
 if xmax == 0 and zmax == 0:
     script_path = os.path.join(current_directory, 'QSQH_model', 'QSQH_model_1D')
 else:
-    script_path = os.path.join(current_directory 'QSQH_model', 'QSQH_model_3D')
+    script_path = os.path.join(current_directory, 'QSQH_model','QSQH_model_3D')
 
 # Execute the corresponding script
 try:
