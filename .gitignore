@@ -2018,3 +2018,6 @@ Python/QSQH_model/y_ref.h5
 Python/output_1D_test/y_plus.h5
 Python/input_friction_field_test/utauL_stats.h5
 Python/output_1D_test/vel_plus_qsqh_loop_008_test
+Python/output_3D_test/vel_plus_qsqh_loop_001_test
+Python/input_friction_field_test/boxsize.h5
+Python/universal_velocity_field_3D_test/xz_tilde.h5

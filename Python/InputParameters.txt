@@ -1,10 +1,10 @@
 Lx,2.513274122871834e+04
 Lz,9.424777960769379e+03
-xmax,0
-zmax,0
+xmax,200
+zmax,120
 ymin,0
-ymax,50
+ymax,20
 test,true
-starting_loop,8
-ending_loop,8
+starting_loop,4
+ending_loop,4
 file_separator,\
