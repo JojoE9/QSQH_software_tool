@@ -185,7 +185,11 @@ y_plus_ref = y[:,idmin:idmax]
 y_plus_ref = y_plus_ref.T
 y_plus = y_plus_ref
 
-Yref, Zref, Xref = np.meshgrid(y_plus_ref, z_plus_ref, x_plus_ref, indexing='ij')
+# Old way of interpolation. Build up the standard output mesh.
+# Yref, Zref, Xref = np.meshgrid(y_plus_ref, z_plus_ref, x_plus_ref, indexing='ij')
+
+# New way of interpolation. Save the information of points into a tuple.
+points_output = (y_plus_ref, z_plus_ref, x_plus_ref)
 
 x_plus = x_plus_ref
 y_plus = y_plus_ref
